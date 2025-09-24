@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Heart Explosion</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    #pinkboard {
+      position: relative;
+      margin: auto;
+      height: 200px;
+      width: 200px;
+      cursor: pointer;
+      animation: animate 1.3s infinite;
+      z-index: 10;
+    }
+
+    #pinkboard:before, #pinkboard:after {
+      content: '';
+      position: absolute;
+      background: #FF5CA4;
+      width: 100px;
+      height: 160px;
+      border-top-left-radius: 50px;
+      border-top-right-radius: 50px;
+    }
+
+    #pinkboard:before {
+      left: 100px;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+                  0 10px 10px rgba(0,0,0,0.22);
+    }
+
+    #pinkboard:after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
+    @keyframes animate {
+      0% { transform: scale(1); }
+      30% { transform: scale(.8); }
+      60% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .explosion-particle {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 10px;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .explosion-particle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="pinkboard"></div>
+
+  <script>
+    const photoUrls = [
+    // VÍ DỤ CÁC CÁCH KHÁC NHAU:
+    'images/photo1.jpg',  // Từ thư mục images/
+    'https://drive.google.com/uc?export=view&id=ABC123XYZ',  // Google Drive
+    'https://i.imgur.com/abcdefg.jpg',  // Imgur
+    
+    // THAY THÀNH LINK ẢNH THẬT CỦA BẠN:
+    'images/hv1.jpg',
+    'images/hv2.jpg',
+    'images/hv3.jpg',
+    'images/hv4.jpg',
+    'images/hv5.jpg',
+    'images/hv6.jpg',
+    'images/hv7.jpg',
+    'images/hv8.jpg',
+    'images/hv9.jpg',
+    'images/hv10.jpg',
+    'images/hv11.jpg',
+    'images/hv12.jpg',
+    'images/hv13.jpg',
+    'images/hv14.jpg',
+    'images/hv15.jpg',
+    'images/hv16.jpg',
+    'images/hv17.jpg',
+    'images/hv18.jpg',
+    'images/hv19.jpg',
+    'images/hv20.jpg',
+    'images/hv21.jpg',
+    'images/hv22.jpg',
+    'images/hv23.jpg',
+    'images/hv24.jpg',
+    'images/hv25.jpg',
+    'images/hv26.jpg',
+    'images/hv27.jpg',
+    'images/hv28.jpg',
+    'images/hv29.jpg',
+    'images/hv30.jpg',
+    'images/hv31.jpg',
+    'images/hv32.jpg',
+    'images/hv33.jpg',
+    'images/hv34.jpg',
+    'images/hv35.jpg',
+    'images/hv36.jpg',
+    'images/hv37.jpg',
+    'images/hv38.jpg',
+    'images/hv39.jpg',
+    'images/hv40.jpg',
+    'images/hv41.jpg',
+    'images/hv42.jpg',
+    'images/hv43.jpg',
+    'images/hv44.jpg',
+    'images/hv45.jpg',
+    'images/hv46.jpg',
+    'images/hv47.jpg',
+    'images/hv48.jpg',
+    'images/hv49.jpg',
+    'images/hv50.jpg',
+    'images/hv51.jpg',
+    'images/hv52.jpg',
+    'images/hv53.jpg',
+    'images/hv54.jpg',
+    'images/hv55.jpg'
+  ];
+
+    let hasClicked = false;
+
+    document.getElementById('pinkboard').addEventListener('click', function() {
+      if (hasClicked) return;
+      hasClicked = true;
+      createPhotoExplosion();
+    });
+
+    function createPhotoExplosion() {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const heart = document.getElementById('pinkboard');
+
+      // Ẩn trái tim
+      heart.style.display = 'none';
+
+      photoUrls.forEach((url, i) => {
+        setTimeout(() => {
+          const particle = document.createElement('div');
+          particle.className = 'explosion-particle';
+
+          const img = document.createElement('img');
+          img.src = url;
+
+          particle.appendChild(img);
+          particle.style.left = centerX + 'px';
+          particle.style.top = centerY + 'px';
+
+          document.body.appendChild(particle);
+
+          // Random hướng bay
+          const angle = Math.random() * Math.PI * 2;
+          const velocity = 200 + Math.random() * 200;
+          const deltaX = Math.cos(angle) * velocity;
+          const deltaY = Math.sin(angle) * velocity;
+
+          // Animate ra vị trí ngẫu nhiên
+          particle.animate([
+            { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+            { transform: `translate(${deltaX}px, ${deltaY}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 1 }
+          ], {
+            duration: 1200,
+            easing: 'ease-out',
+            fill: 'forwards'
+          });
+        }, i * 100);
+      });
+
+      // Sau 3s hiện lại trái tim
+      setTimeout(() => {
+        heart.style.display = 'block';
+        hasClicked = false;
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
